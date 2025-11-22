@@ -10,7 +10,7 @@ app = FastAPI()
 # Подключаем CORS — разрешаем запросы с любых доменов (можно сузить до домена Тильды)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # или ["https://ваш‑сайт.tilda.ws", "https://ваш‑домен.com"]
+    allow_origins=["*"],  # или ["http://smm3.it-resheniya.com/irobot", "http://smm3.it-resheniya.com"]
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
