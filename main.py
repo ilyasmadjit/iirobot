@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import requests
 import openai
@@ -6,6 +7,16 @@ import os
 
 app = FastAPI()
 
+# Подключаем CORS — разрешаем запросы с любых доменов (можно сузить до домена Тильды)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # или ["https://ваш‑сайт.tilda.ws", "https://ваш‑домен.com"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Читаем ключи из переменных окружения
 OPENAI_API_KEY = os.getenv("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")
 ELEVENLABS_API_KEY = os.getenv("1f327eb4cab7b572bdd86d49949b0ad3127fea66e84427d1bb30a014b48aaf58")
 ONLINEPBX_API_KEY = os.getenv("QVA2ZVhHcmExbENRcHlyMjBmUEY3NWo5elpNNFhFOUo")
@@ -16,6 +27,10 @@ openai.api_key = OPENAI_API_KEY
 
 class CallRequest(BaseModel):
     phone_number: str
+
+@app.get("/")
+def root():
+    return {"message": "Voicebot работает"}
 
 @app.post("/call")
 async def initiate_call(data: CallRequest):
@@ -30,25 +45,16 @@ async def initiate_call(data: CallRequest):
     response = requests.post("https://app.onlinepbx.ru/api/calls/", json=payload, headers=headers)
     return {"status": "call started", "response": response.json()}
 
-@app.post("/webhook")
-async def onlinepbx_webhook(req: Request):
-    data = await req.json()
-    print("Webhook получен:", data)
-    return {"ok": True}
-
 @app.post("/generate-reply")
 async def generate_reply(req: Request):
     body = await req.json()
     message = body.get("message")
     response = openai.ChatCompletion.create(
-        model="gpt-4",
+        model="gpt‑4",
         messages=[
             {"role": "system", "content": "Ты голосовой помощник, общаешься с клиентом дружелюбно и уверенно."},
             {"role": "user", "content": message}
         ]
     )
-    return {"response": response.choices[0].message.content}
-
-@app.get("/")
-def root():
-    return {"message": "Voicebot работает"}
+    answer = response.choices[0].message.content
+    return {"response": answer}
