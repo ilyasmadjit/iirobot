@@ -6,11 +6,11 @@ import os
 
 app = FastAPI()
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+OPENAI_API_KEY = os.getenv("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")
 ELEVENLABS_API_KEY = os.getenv("1f327eb4cab7b572bdd86d49949b0ad3127fea66e84427d1bb30a014b48aaf58")
-ONLINEPBX_API_KEY = os.getenv("ONLINEPBX_API_KEY")
-ONLINEPBX_SIP_DOMAIN = os.getenv("ONLINEPBX_SIP_DOMAIN")
-CALL_FROM_NUMBER = os.getenv("CALL_FROM_NUMBER")
+ONLINEPBX_API_KEY = os.getenv("QVA2ZVhHcmExbENRcHlyMjBmUEY3NWo5elpNNFhFOUo")
+ONLINEPBX_SIP_DOMAIN = os.getenv("pbx26432.onpbx.ru")
+CALL_FROM_NUMBER = os.getenv("79011477868")
 
 openai.api_key = OPENAI_API_KEY
 
